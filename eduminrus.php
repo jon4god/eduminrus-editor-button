@@ -14,14 +14,23 @@ if (!function_exists('add_action')) {
 }
 
 add_filter('tiny_mce_before_init', 'eduminrus_mce_options');
-function eduminrus_mce_options( $init ) {
-  $ext = 'span[id|name|class|lang|style|itemprop]';
-  if ( isset( $init['extended_valid_elements'] ) ) {
-    $init['extended_valid_elements'] .= ',' . $ext;
-  } else {
-    $init['extended_valid_elements'] = $ext;
-   }
-  return $init;
+function eduminrus_mce_options( $options ) {
+ 
+    if ( ! isset( $options['extended_valid_elements'] ) ) {
+        $options['extended_valid_elements'] = '';
+    } else {
+        $options['extended_valid_elements'] .= ',';
+    }
+ 
+    if ( ! isset( $options['custom_elements'] ) ) {
+        $options['custom_elements'] = '';
+    } else {
+        $options['custom_elements'] .= ',';
+    }
+ 
+    $options['extended_valid_elements'] .= 'eduminrus[itemprop|itemscope|itemtype]';
+    $options['custom_elements']         .= 'eduminrus[itemprop|itemscope|itemtype]';
+    return $options;
 }
 
 add_action( 'mce_buttons', 'eduminrus_register_buttons' );
